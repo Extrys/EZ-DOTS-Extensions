@@ -26,7 +26,7 @@ namespace SquirrelBytes.DOTS
 				b = switched ? pair.EntityA : pair.EntityB;
 
 				return index < 2 && getterA.Exists(a) & getterB.Exists(b);
-			}
+		    }
 
 
 		/// <summary> This function is used to switch the pair and check the interaction compatibility between their components,
