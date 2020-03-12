@@ -10,7 +10,7 @@ namespace SquirrelBytes.DOTS
 			pair.EntityA = pair.EntityB;
 			pair.EntityB = tempA;
 		}
-
+			
 
 		/// <summary> This function is used inside the "for" conditional block,
 		/// for repeating the interactions between entity components if possible </summary>
