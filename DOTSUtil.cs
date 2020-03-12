@@ -11,8 +11,8 @@ namespace SquirrelBytes.DOTS
 		}
 			
 		public static bool TryInteract<T, Y>(this EntityPair pair,
-		int index, ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB, out Entity a, out Entity b) 
-		where T : struct, IComponentData where Y : struct, IComponentData
+			int index, ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB, out Entity a, out Entity b) 
+			where T : struct, IComponentData where Y : struct, IComponentData
 		{
 			bool switched = index > 0;
 			a = switched ? pair.EntityB : pair.EntityA;
@@ -22,11 +22,11 @@ namespace SquirrelBytes.DOTS
 		}
 
 		public static bool SwitchAndTryInteract<T, Y>(this ref EntityPair pair, 
-	      	ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB) 
-		where T : struct, IComponentData where Y : struct, IComponentData
+			ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB) 
+			where T : struct, IComponentData where Y : struct, IComponentData
 		{
-				pair.PairSwitch();
-				return getterA.Exists(pair.EntityA) & getterB.Exists(pair.EntityB);
+			pair.PairSwitch();
+			return getterA.Exists(pair.EntityA) & getterB.Exists(pair.EntityB);
 		}
 	}
 }
