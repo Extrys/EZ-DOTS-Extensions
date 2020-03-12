@@ -10,7 +10,8 @@ namespace SquirrelBytes.DOTS
 			pair.EntityB = tempA;
 		}
 
-		public static bool TryInteract<T, Y>(this EntityPair pair, int index, ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB, out Entity a, out Entity b) 
+		public static bool TryInteract<T, Y>
+			(this EntityPair pair, int index, ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB, out Entity a, out Entity b) 
 			where T : struct, IComponentData where Y : struct, IComponentData
 		{
 			bool switched = index > 0;
