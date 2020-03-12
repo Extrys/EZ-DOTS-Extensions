@@ -57,47 +57,45 @@ In most of cases you will need to use it in the two directions
 so you will need unnecesarly duplicate the code
 
 i came with a solution for this
+<b>Method A:</b> you can do this way with TryInteract Extension this will made it two directional by default and you dont create noisy A&B variablesit will iterate 2 times, one for each direction
 ```csharp
-     [BurstCompile]
-     struct CollisionEventImpulseJob : ICollisionEventsJob
-     {
-         [ReadOnly]
-         public ComponentDataFromEntity<CollisionEventImpulse> impulseGetter;
-         public ComponentDataFromEntity<PhysicsVelocity> velocityGetter;
-         
-         public void Execute(CollisionEvent collisionEvent)
-         {
-            //Option A
-            for (int i = 0; collisionEvent.Entities.TryInteract(i, impulseGetter, velocityGetter, out Entity impulseEntity, out Entity velocityEntity); i++)
-            {
-                var impulseComponent = impulseGetter[impulseEntity];
-                var velocityComponent = velocityGetter[velocityEntity];
-                velocityComponent.Linear = impulseComponent.Impulse;
-                velocityGetter[velocityEntity] = velocityComponent;
-            }
-      
-            //Option B
-            var pair = collisionEvent.Entities;
-            for (int i = 0; i<2 && pair.SwitchAndTryInteract(impulseGetter, velocityGetter); i++)
-            {
-                var impulseEntity = pair.EntityA; 
-                var velocityEntity = pair.EntityB;
-                
-                var impulseComponent = impulseGetter[impulseEntity];
-                var velocityComponent = velocityGetter[velocityEntity];
-                velocityComponent.Linear = impulseComponent.Impulse;
-                velocityGetter[velocityEntity] = velocityComponent;
-            }
+[BurstCompile]
+struct CollisionEventImpulseJob : ICollisionEventsJob
+{
+    [ReadOnly]
+    public ComponentDataFromEntity<CollisionEventImpulse> impulseGetter;
+    public ComponentDataFromEntity<PhysicsVelocity> velocityGetter;
+
+    public void Execute(CollisionEvent collisionEvent)
+    {
+        for (int i = 0; collisionEvent.Entities.TryInteract(i, impulseGetter, velocityGetter, out Entity impulseEntity, out Entity velocityEntity); i++)
+        {
+            var impulseComponent = impulseGetter[impulseEntity];
+            var velocityComponent = velocityGetter[velocityEntity];
+            velocityComponent.Linear = impulseComponent.Impulse;
+            velocityGetter[velocityEntity] = velocityComponent;
         }
     }
+}
 ```
-<b>Method A:</b> you can do this way with TryInteract Extension this will made it two directional by default and you dont create noisy A&B variablesit will iterate 2 times, one for each direction
 <br/>but one of the problems of this is that the "for" line can be so long is for that i created also another way to doing so
 
-<b>Method B:</b> this way will need you take the copy of the pair because internally it will switch the values between the value pairs
-it uses an extension metod called ``SwitchPair`` and you can use it at you will
+<b>Method B:</b> this way will need you take the copy of the pair because it will switch the values between the value pairs.
+It uses an extension metod called ``SwitchPair`` that you can use at you will
+```csharp
+        var pair = collisionEvent.Entities;
+        for (int i = 0; i<2 && pair.SwitchAndTryInteract(impulseGetter, velocityGetter); i++)
+        {
+            var impulseEntity = pair.EntityA; 
+            var velocityEntity = pair.EntityB;
 
-Just create a "for" loop that iterates 2 times and call the switch after one iteration so the second will do the same iteration but with the entities take away the repetition with the loop which is simply a dual direction check
+            var impulseComponent = impulseGetter[impulseEntity];
+            var velocityComponent = velocityGetter[velocityEntity];
+            velocityComponent.Linear = impulseComponent.Impulse;
+            velocityGetter[velocityEntity] = velocityComponent;
+        }
+```
+what im doing in both is Just create a "for" loop that iterates 2 times and call the switch after one iteration so the second will do the same iteration but with the entities take away the repetition with the loop which is simply a dual direction check
 
 
 
