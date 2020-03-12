@@ -1,1 +1,105 @@
 EZ-DOTS-Extensions
+
+Welcome! This is just a project that I'm starting and in which I'll add all the extensions that I'll create in my projects, which will help me and maybe you to have an easier to use, more readable, more modular and shorter code, avoiding repetitions. </br>Everything is focused mainly to use with DOTS
+
+
+<b>This is a WIP README</b>
+
+
+meanwhile this repo is growing i will put here one of the first utils that is made for DOTS Physics collisions and triggers
+
+
+## Util for Collisions and triggers for avoid repetitions
+for example i will leave a job for detecting collisions that comes with Unity DOTS Physics Samples
+```csharp
+    [BurstCompile]
+    struct CollisionEventImpulseJob : ICollisionEventsJob
+    {
+        [ReadOnly]
+        public ComponentDataFromEntity<CollisionEventImpulse> ColliderEventImpulseGroup;
+        public ComponentDataFromEntity<PhysicsVelocity> PhysicsVelocityGroup;
+
+        public void Execute(CollisionEvent collisionEvent)
+        {
+            Entity entityA = collisionEvent.Entities.EntityA;
+            Entity entityB = collisionEvent.Entities.EntityB;
+
+            bool isBodyADynamic = PhysicsVelocityGroup.Exists(entityA);
+            bool isBodyBDynamic = PhysicsVelocityGroup.Exists(entityB);
+
+            bool isBodyARepulser = ColliderEventImpulseGroup.Exists(entityA);
+            bool isBodyBRepulser = ColliderEventImpulseGroup.Exists(entityB);
+
+            if(isBodyARepulser && isBodyBDynamic)
+            {
+                var impulseComponent = ColliderEventImpulseGroup[entityA];
+                var velocityComponent = PhysicsVelocityGroup[entityB];
+                velocityComponent.Linear = impulseComponent.Impulse;
+                PhysicsVelocityGroup[entityB] = velocityComponent;
+            }
+            if (isBodyBRepulser && isBodyADynamic)
+            {
+                var impulseComponent = ColliderEventImpulseGroup[entityB];
+                var velocityComponent = PhysicsVelocityGroup[entityA];
+                velocityComponent.Linear = impulseComponent.Impulse;
+                PhysicsVelocityGroup[entityA] = velocityComponent;
+            }
+        }
+    }
+```
+This is not completly bad but for me atleast the repetition hurts and my eyes bleed
+also if i modify anything i have to do it too inside the condition below
+this is made this way to detect interactions in two directions
+so if i have a Sword that is Breaker and breakable that collides with another one
+both swords needs to be broken
+this is made this way just for doing this (weaponA breaks weaponB) <-> (weaponB breaks weaponA)
+In most of cases you will need to use it in the two directions
+so you will need unnecesarly duplicate the code
+
+i came with a solution for this
+```csharp
+	[BurstCompile]
+	struct CollisionEventImpulseJob : ICollisionEventsJob
+	{
+		[ReadOnly]
+    public ComponentDataFromEntity<CollisionEventImpulse> impulseGetter;
+		public ComponentDataFromEntity<PhysicsVelocity> velocityGetter;
+
+		public void Execute(CollisionEvent collisionEvent)
+		{
+      //Option A
+			for (int i = 0; collisionEvent.Entities.TryInteract(i, impulseGetter, velocityGetter, out Entity impulseEntity, out Entity velocityEntity); i++)
+			{
+				var impulseComponent = impulseGetter[impulseEntity];
+				var velocityComponent = velocityGetter[velocityEntity];
+				velocityComponent.Linear = impulseComponent.Impulse;
+				velocityGetter[velocityEntity] = velocityComponent;
+			}
+      
+      
+      //Option B
+			var pair = collisionEvent.Entities;
+			for (int i = 0; i<2 && pair.SwitchAndTryInteract(impulseGetter, velocityGetter); i++)
+			{
+				var impulseEntity = pair.EntityA; 
+				var velocityEntity = pair.EntityB;
+
+				var impulseComponent = impulseGetter[impulseEntity];
+				var velocityComponent = velocityGetter[velocityEntity];
+				velocityComponent.Linear = impulseComponent.Impulse;
+				velocityGetter[velocityEntity] = velocityComponent;
+			}
+		}
+	}
+```
+<b>Method A:</b> you can do this way with TryInteract Extension this will made it two directional by default and you dont create noisy A&B variablesit will iterate 2 times, one for each direction
+<br/>but one of the problems of this is that the "for" line can be so long is for that i created also another way to doing so
+
+<b>Method B:</b> this way will need you take the copy of the pair because internally it will switch the values between the value pairs
+it uses an extension metod called ``SwitchPair`` and you can use it at you will
+
+Just create a "for" loop that iterates 2 times and call the switch after one iteration so the second will do the same iteration but with the entities take away the repetition with the loop which is simply a dual direction check
+
+
+
+I will be updating the Documentation and adding more functionality to this library so it will become larger with time to make your life a bit easier, if it helps you i will be happy
