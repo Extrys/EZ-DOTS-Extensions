@@ -15,7 +15,9 @@ namespace SquirrelBytes.DOTS
 		/// <summary> This function is used inside the "for" conditional block, for repeating the interactions between entity components if possible </summary>
 		/// <param name="index">"for" index, used to defire the interaction direction</param><param name="getterA">ComponentDataFromEntity A</param><param name="getterB">ComponentDataFromEntity B</param>
 		/// <param name="a">Entity A</param><param name="b">Entity B</param>
-		public static bool TryInteract<T, Y> (this EntityPair pair, int index, ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB, out Entity a, out Entity b) where T : struct, IComponentData where Y : struct, IComponentData
+		public static bool TryInteract<T, Y> (this EntityPair pair, 
+		      	int index, ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB, out Entity a, out Entity b) 
+			where T : struct, IComponentData where Y : struct, IComponentData
 		{
 			bool switched = index > 0;
 			a = switched ? pair.EntityB : pair.EntityA;
