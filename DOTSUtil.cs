@@ -21,8 +21,8 @@ namespace SquirrelBytes.DOTS
 				return index < 2 && getterA.Exists(a) & getterB.Exists(b);
 		    	}
 
-		public static bool SwitchAndTryInteract<T, Y>
-			(this ref EntityPair pair, ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB) 
+		public static bool SwitchAndTryInteract<T, Y>(this ref EntityPair pair, 
+		      ComponentDataFromEntity<T> getterA, ComponentDataFromEntity<Y> getterB) 
 			where T : struct, IComponentData where Y : struct, IComponentData
 			{
 				pair.PairSwitch();
