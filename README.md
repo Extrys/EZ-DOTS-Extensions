@@ -84,15 +84,18 @@ struct CollisionEventImpulseJob : ICollisionEventsJob
 It uses an extension metod called ``SwitchPair`` that you can use at you will
 ```csharp
         var pair = collisionEvent.Entities;
-        for (int i = 0; i<2 && pair.SwitchAndTryInteract(impulseGetter, velocityGetter); i++)
+        for (int i = 0; i<2; i++)
         {
-            var impulseEntity = pair.EntityA; 
-            var velocityEntity = pair.EntityB;
+            if( pair.SwitchAndTryInteract(impulseGetter, velocityGetter))
+            {
+                var impulseEntity = pair.EntityA; 
+                var velocityEntity = pair.EntityB;
 
-            var impulseComponent = impulseGetter[impulseEntity];
-            var velocityComponent = velocityGetter[velocityEntity];
-            velocityComponent.Linear = impulseComponent.Impulse;
-            velocityGetter[velocityEntity] = velocityComponent;
+                var impulseComponent = impulseGetter[impulseEntity];
+                var velocityComponent = velocityGetter[velocityEntity];
+                velocityComponent.Linear = impulseComponent.Impulse;
+                velocityGetter[velocityEntity] = velocityComponent;
+            }
         }
 ```
 what im doing in both is Just create a "for" loop that iterates 2 times and call the switch after one iteration so the second will do the same iteration but with the entities take away the repetition with the loop which is simply a dual direction check
