@@ -68,7 +68,7 @@ struct CollisionEventImpulseJob : ICollisionEventsJob
 
     public void Execute(CollisionEvent collisionEvent)
     {
-        for (int i = 0; collisionEvent.Entities.TryInteract(i, impulseGetter, velocityGetter, out Entity impulseEntity, out Entity velocityEntity); i++)
+        for (int i = 0; collisionEvent.Entities.TryInteract(ref i, impulseGetter, velocityGetter, out Entity impulseEntity, out Entity velocityEntity);)
         {
             var impulseComponent = impulseGetter[impulseEntity];
             var velocityComponent = velocityGetter[velocityEntity];
