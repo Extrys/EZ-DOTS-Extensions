@@ -4,8 +4,8 @@ Welcome! This is just a project that I'm starting and in which I'll add all the 
 
 
 <b>This is a WIP README</b></br>
-    * <a href="## Util for Collisions and triggers for avoid repetitions">Utils for Collisions</a></br>
-    * <a href="## DOTS EZ Quaternion Extensions">Quaternion Extensions</a><</br>
+    · <a href="## Util for Collisions and triggers for avoid repetitions">Utils for Collisions</a></br>
+    · <a href="## DOTS EZ Quaternion Extensions">Quaternion Extensions</a></br>
 
 meanwhile this repo is growing i will put here one of the first utils that is made for DOTS Physics collisions and triggers
 
