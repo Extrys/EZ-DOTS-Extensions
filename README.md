@@ -3,9 +3,9 @@ EZ-DOTS-Extensions
 Welcome! This is just a project that I'm starting and in which I'll add all the extensions that I'll create in my projects, which will help me and maybe you to have an easier to use, more readable, more modular and shorter code, avoiding repetitions. </br>Everything is focused mainly to use with DOTS
 
 
-<b>This is a WIP README</b>
-    * <a href="## Util for Collisions and triggers for avoid repetitions">Utils for Collisions</a>
-    * <a href="## DOTS EZ Quaternion Extensions">Quaternion Extensions</a>
+<b>This is a WIP README</b></br>
+    * <a href="## Util for Collisions and triggers for avoid repetitions">Utils for Collisions</a></br>
+    * <a href="## DOTS EZ Quaternion Extensions">Quaternion Extensions</a><</br>
 
 meanwhile this repo is growing i will put here one of the first utils that is made for DOTS Physics collisions and triggers
 
