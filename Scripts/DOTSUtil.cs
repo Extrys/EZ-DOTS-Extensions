@@ -30,16 +30,43 @@ namespace SquirrelBytes.DOTS
 		
 		
 		
-      		public static void SetComponentsForNewHybridEntity(out Entity entity, params object[] objects)
-      		{
-            		EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            		entity = manager.CreateEntity();
+      		public static void AddHybridComponentsToNewEntity(out Entity entity, params object[] objects)
+		{
+			EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+			entity = manager.CreateEntity();
 
-            		int iterations = objects.Length;
-            		for(int i = 0; i<iterations; i++)
-                  		manager.AddComponentObject(entity, objects[i]);
-      		}
+			int iterations = objects.Length;
+			for (int i = 0; i < iterations; i++)
+				manager.AddComponentObject(entity, objects[i]);
+		}
 
-      		public static void SetComponentsForNewHybridEntity(params object[] objects) => SetComponentsForNewHybridEntity(out _, objects);
+		public static void AddComponentObject(this Entity entity, params object[] objects)
+		{
+			EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+			int iterations = objects.Length;
+			for (int i = 0; i < iterations; i++)
+				manager.AddComponentObject(entity, objects[i]);
+		}
+
+		public static void AddComponentDatasToNewEntity<T>(out Entity entity, params T[] objects) where T : struct, IComponentData
+		{
+			EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+			entity = manager.CreateEntity();
+
+			int iterations = objects.Length;
+			for (int i = 0; i < iterations; i++)
+				manager.AddComponentData(entity, objects[i]);
+		}
+
+		public static void AddComponentData<T>(this Entity entity, params T[] objects) where T : struct, IComponentData
+		{
+			EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+			int iterations = objects.Length;
+			for (int i = 0; i < iterations; i++)
+				manager.AddComponentData(entity, objects[i]);
+		}
+
+		public static void AddHybridComponentsToNewEntity(params object[] objects) => AddHybridComponentsToNewEntity(out _, objects);
+		public static void AddHybridComponentsToNewEntity<T>(params T[] objects) where T : struct, IComponentData => AddComponentDatasToNewEntity(out _, objects);
 	}
 }
