@@ -27,5 +27,19 @@ namespace SquirrelBytes.DOTS
 			pair.PairSwitch();
 			return getterA.Exists(pair.EntityA) & getterB.Exists(pair.EntityB);
 		}
+		
+		
+		
+      		public static void SetComponentsForNewHybridEntity(out Entity entity, params object[] objects)
+      		{
+            		EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            		entity = manager.CreateEntity();
+
+            		int iterations = objects.Length;
+            		for(int i = 0; i<iterations; i++)
+                  		manager.AddComponentObject(entity, objects[i]);
+      		}
+
+      		public static void SetComponentsForNewHybridEntity(params object[] objects) => SetComponentsForNewHybridEntity(out _, objects);
 	}
 }
